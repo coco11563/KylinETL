@@ -1,7 +1,6 @@
 package HbaseImporter;
 
 import HbaseImporter.ConfigurePart.Inial;
-import HbaseImporter.HolidayPart.CellerInnerClass.rowKey;
 import datastruct.KeySizeException;
 import net.sf.json.JSONObject;
 

@@ -19,7 +19,7 @@ import static HbaseImporter.ConfigurePart.Inial.getJsonData;
  */
 public class dateFormat {
     private static final Map<String, String> monthDate = new HashMap<>();
-    private static final String monthPath = "./conf/date.json";
+    private static final String monthPath = "./src/main/conf/date.json";
     private String month;
     private String day;
     private String year;

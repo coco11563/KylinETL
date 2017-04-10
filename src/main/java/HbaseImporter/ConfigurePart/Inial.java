@@ -17,9 +17,9 @@ public class Inial {
     private static Map<String, String> provinceNum = new HashMap<>();
     private static Map<String, String> countryNum = new HashMap<>();
 
-    private static final String cityNumPath = "./conf/cityNum.json";
-    private static final String provincePath = "./conf/province_data.json";
-    private static final String countryPath = "./conf/country.json";
+    private static final String cityNumPath = "./src/main/conf/cityNum.json";
+    private static final String provincePath = "./src/main/conf/province_data.json";
+    private static final String countryPath = "./src/main/conf/country.json";
 
 
     static{

@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import static HbaseImporter.HbaseImporter.cfg;
+
 /**
  * Created by coco1 on 2017/1/27.
  *
@@ -23,8 +25,6 @@ public class HbaseOperation {
 
     public static final String columnFamily = "sinadata";
 
-
-    public static Configuration cfg = HBaseConfiguration.create();
 
     private static Logger logger = Logger.getLogger(HbaseOperation.class);
 

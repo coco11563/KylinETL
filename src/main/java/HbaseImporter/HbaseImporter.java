@@ -30,13 +30,14 @@ import static HbaseImporter.ZipPart.GetFileStatus.showAllFiles;
 import static HbaseUtil.HbaseOperation.columnFamily;
 
 public class HbaseImporter {
-    private final static String cityNumPath = "./src/conf/cityNum.json";
-    private final static String timesetpath = "./src/conf/timeSetting.json";
-    private final static String completeddate = "./src/conf/CompletedDate.json";
-    private final static String completednum = "./src/conf/completednum.json";
+    private final static String cityNumPath = "./src/main/conf/cityNum.json";
+    //2016-02-24 -->  2016-10-05
+    private final static String timesetpath = "./src/main/conf/timeSetting.json";
+    private final static String completeddate = "./src/main/conf/CompletedDate.json";
+    private final static String completednum = "./src/main/conf/completednum.json";
 
     // 获取HBaseConfiguration
-    private static Configuration cfg = HBaseConfiguration.create();
+    public static Configuration cfg = HBaseConfiguration.create();
 
 
     private static String TableName = "SinaWeiboDataStorage";
@@ -99,7 +100,7 @@ public class HbaseImporter {
                     stornum += inputjson.size();
                     HbaseOperation.create(TableName, columnFamily);
                     HTable cityTable = new HTable(cfg, TableName);
-                    ArrayList<Put> putDateList = new ArrayList<Put>();
+                    ArrayList<Put> putDateList = new ArrayList<>();
                     for (int rownum = 0; rownum < inputjson.size(); rownum++)//按行数遍历
                     {
                         HbaseCeller hbaseCeller = new HbaseCeller(inputjson.getJSONObject(rownum));

@@ -1,8 +1,9 @@
-package HbaseImporter.HolidayPart.CellerInnerClass;
+package HbaseImporter;
 
 import HbaseImporter.ConfigurePart.Inial;
 import HbaseImporter.DatePart.dateFormat;
 import HbaseImporter.GeoHashPart.GeoHash;
+import HbaseImporter.HolidayPart.ChineseHoliday;
 import datastruct.KDTree;
 import datastruct.KeySizeException;
 import module.TestPoint;
@@ -13,8 +14,9 @@ import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.text.ParseException;
-import static HbaseImporter.HolidayPart.ChineseHoliday.getHoliday;
-import static KDTreeProvider.getTree.*;
+import java.util.Date;
+
+import static KDTreeProvider.getTree.getInnerConfigNormalKDTree;
 
 /**
  * Created by coco1 on 2017/1/27.
@@ -90,8 +92,9 @@ public class rowKey {
         this.year = d.getYear();
         this.month = d.getMonth();
         this.day = d.getDay();
-        this.isHoliday = getHoliday(d.toDate());
+        this.isHoliday = ChineseHoliday.getHoliday(d.toDate());
     }
+
 
     /**
      *

@@ -18,7 +18,7 @@ public class HiveService {
     //hive的jdbc驱动类
     public static String dirverName = "org.apache.hive.jdbc.HiveDriver";
     //连接hive的URL hive1.2.1版本需要的是jdbc:hive2，而不是 jdbc:hive
-    public static String url = "jdbc:hive2://master.hadoop:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2";
+    public static String url = "jdbc:hive2://slave1.hadoop:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2";
     //登录linux的用户名  一般会给权限大一点的用户，否则无法进行事务形操作
     public static String user = "root";
     //登录linux的密码

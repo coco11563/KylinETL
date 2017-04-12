@@ -18,11 +18,7 @@ public class HiveService {
     //hive的jdbc驱动类
     public static String dirverName = "org.apache.hive.jdbc.HiveDriver";
     //连接hive的URL hive1.2.1版本需要的是jdbc:hive2，而不是 jdbc:hive
-    public static String url = "jdbc:hive2://slave1.hadoop:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2";
-    //登录linux的用户名  一般会给权限大一点的用户，否则无法进行事务形操作
-    public static String user = "root";
-    //登录linux的密码
-    public static String pass = "xgxylab163";
+    public static String url = "jdbc:hive2://slave1.hadoop:10000/;transportMode=binary";
     /**
      * 创建连接
      * @return
@@ -32,7 +28,7 @@ public class HiveService {
         Connection conn = null;
         try {
             Class.forName(dirverName);
-            conn = DriverManager.getConnection(url, user, pass);
+            conn = DriverManager.getConnection(url,"ambari-qa","");
         } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

@@ -75,4 +75,41 @@ public class FileUtil {
 
         return temp;
     }
+
+
+    public static String fileRead(String FileName) throws FileNotFoundException {
+        File f = new File(outputpath + "/../SQL/Table/" + FileName);
+        if (!f.exists()) {
+            throw new FileNotFoundException();
+        }
+        StringBuilder temp = new StringBuilder();
+        FileInputStream in = null;
+        Charset cs = Charset.forName ("UTF-8");
+        try {
+            in = new FileInputStream(f);
+            ByteBuffer buffer = ByteBuffer.allocate(1024);
+            FileChannel fcIn = in.getChannel();
+            // FileInputStream:从文件系统中的某个文件中获得输入字节。
+            in = new FileInputStream(f);
+            while (true) {
+                buffer.clear();
+                int r = fcIn.read(buffer);
+                if (r == -1) {
+                    break;
+                }
+                buffer.flip();
+                temp.append(cs.decode(buffer).toString());
+            }
+        } catch (Exception e) {
+            e.getStackTrace();
+        } finally {
+            try {
+                assert in != null;
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return temp.toString();
+    }
 }

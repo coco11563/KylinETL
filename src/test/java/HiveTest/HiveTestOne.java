@@ -12,11 +12,13 @@ package HiveTest;
 
         import StarModelBuilder.HiveTest.HiveService;
         import org.apache.log4j.Logger;
+        import org.junit.Test;
+
 public class HiveTestOne {
 
     static Logger logger = Logger.getLogger(HiveTestOne.class);
-
-    public static void main(String[] args){
+    @Test
+    public void HiveTest(){
 
         Connection conn = HiveService.getConn();
         Statement stmt = null;

@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by Sha0w on 2017/4/12.
  */
-public class TimeClass {
+public class Time {
 
     private Date date;
     private String year;
@@ -13,6 +13,21 @@ public class TimeClass {
     private String day;
     private String is_holiday;
     private String time_id;
+
+    public Time(String year, String month, String day, String is_holiday, Date date) {
+        setDate(date);
+        setDay(day);
+        setIs_holiday(is_holiday);
+        setMonth(month);
+        setYear(year);
+        generateId();
+    }
+
+    private void generateId() {
+        // TODO Auto-generated catch block
+        String id = "";
+        setTime_id(id);
+    }
 
     public String getTime_id() {
         return time_id;

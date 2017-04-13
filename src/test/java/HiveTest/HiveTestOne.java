@@ -54,7 +54,7 @@ public class HiveTestOne {
             logger.debug("create is susscess");
 
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         }
         HiveService.closeStmt(stmt);

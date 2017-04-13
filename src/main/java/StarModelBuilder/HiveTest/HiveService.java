@@ -30,10 +30,10 @@ public class HiveService {
             Class.forName(dirverName);
             conn = DriverManager.getConnection(url,"ambari-qa","");
         } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         }
         return conn;
@@ -61,7 +61,7 @@ public class HiveService {
         try {
             conn.close();
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         }
     }
@@ -74,7 +74,7 @@ public class HiveService {
         try {
             stmt.close();
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         }
     }

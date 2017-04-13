@@ -14,7 +14,7 @@ import java.text.ParseException;
 public class HbaseCeller {
     private rowKey rowKey;
     private OtherInform otherInform;
-    private static Inial inial;
+    public static Inial inial;
 
     static {
         inial = new Inial();

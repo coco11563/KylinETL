@@ -78,7 +78,7 @@ public class FileUtil {
 
 
     public static String fileRead(String FileName) throws FileNotFoundException {
-        File f = new File(outputpath + "/../SQL/Table/" + FileName);
+        File f = new File(FileName);
         if (!f.exists()) {
             throw new FileNotFoundException();
         }

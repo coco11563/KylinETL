@@ -12,6 +12,10 @@ public class Province {
         setName(name);
         setId(inial.getProvince_id(name));
     }
+    public Province(String name, String id) {
+        setId(id);
+        setName(name);
+    }
     public String getId() {
         return id;
     }

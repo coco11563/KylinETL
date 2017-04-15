@@ -32,16 +32,20 @@ public class rowKey {
             e.printStackTrace();
         }
     }
-    private String country_id;
-    private String province_id;
-    private String city_id;
-    private String geo_Hash;
-    private String user_id;
-    private String weibo_id;
-    private String year;
-    private String month;
-    private String day;
-    private int isHoliday;
+    public String city_name;
+    public String province_name;
+    public String country_name;
+    public String country_id;
+    public String province_id;
+    public String city_id;
+    public String geo_Hash;
+    public String user_id;
+    public String weibo_id;
+    public String year;
+    public String month;
+    public String day;
+    public int isHoliday;
+    public dateFormat dateFormat;
     public rowKey(JSONObject weiboInform, Inial inial) throws JSONException, ParseException, KeySizeException {
         double lat = weiboInform.getJSONObject("geo").getJSONArray("coordinates").getDouble(0);
         double lng = weiboInform.getJSONObject("geo").getJSONArray("coordinates").getDouble(1);
@@ -53,12 +57,18 @@ public class rowKey {
                 if (object_2 != null) {
                     JSONObject address = object_2.optJSONObject("address");
                     if (address != null) {
-                        this.country_id = inial.getCountry_id(address.getString("country"));
-                        this.city_id = inial.getCity_id(address.getString("locality"));
-                        this.province_id = inial.getProvince_id(address.getString("region"));
+                        this.country_name = address.getString("country");
+                        this.city_name = address.getString("locality");
+                        this.province_name = address.getString("region");
+                        this.country_id = inial.getCountry_id(country_name);
+                        this.city_id = inial.getCity_id(city_name);
+                        this.province_id = inial.getProvince_id(province_name);
                     } else {
                         String[] cityInform = getCity(lat, lng) ;
                         this.country_id = "00";
+                        this.country_name = "中国";
+                        this.city_name = cityInform[1];
+                        this.province_name = cityInform[0];
                         this.province_id = inial.getProvince_id(cityInform[0]);
                         this.city_id = inial.getCity_id(cityInform[1]);
                         logger.error(country_id + "_" + province_id + "_" + city_id);
@@ -66,6 +76,9 @@ public class rowKey {
                 } else {
                     String[] cityInform = getCity(lat, lng) ;
                     this.country_id = "00";
+                    this.country_name = "中国";
+                    this.city_name = cityInform[1];
+                    this.province_name = cityInform[0];
                     this.province_id = inial.getProvince_id(cityInform[0]);
                     this.city_id = inial.getCity_id(cityInform[1]);
                     logger.error(country_id + "_" + province_id + "_" + city_id);
@@ -73,6 +86,9 @@ public class rowKey {
             } else {
                 String[] cityInform = getCity(lat, lng) ;
                 this.country_id = "00";
+                this.country_name = "中国";
+                this.city_name = cityInform[1];
+                this.province_name = cityInform[0];
                 this.province_id = inial.getProvince_id(cityInform[0]);
                 this.city_id = inial.getCity_id(cityInform[1]);
                 logger.error(country_id + "_" + province_id + "_" + city_id);
@@ -80,6 +96,9 @@ public class rowKey {
         } else {
             String[] cityInform = getCity(lat, lng) ;
             this.country_id = "00";
+            this.country_name = "中国";
+            this.city_name = cityInform[1];
+            this.province_name = cityInform[0];
             this.province_id = inial.getProvince_id(cityInform[0]);
             this.city_id = inial.getCity_id(cityInform[1]);
             logger.error(country_id + "_" + province_id + "_" + city_id);
@@ -88,11 +107,11 @@ public class rowKey {
         this.user_id = weiboInform.getJSONObject("user").getString("id");
         this.weibo_id = weiboInform.getString("idstr");
         String[] date = weiboInform.getString("created_at").split(" ");
-        dateFormat d = new dateFormat(date);
-        this.year = d.getYear();
-        this.month = d.getMonth();
-        this.day = d.getDay();
-        this.isHoliday = ChineseHoliday.getHoliday(d.toDate());
+        this.dateFormat = new dateFormat(date);
+        this.year = dateFormat.getYear();
+        this.month = dateFormat.getMonth();
+        this.day = dateFormat.getDay();
+        this.isHoliday = ChineseHoliday.getHoliday(dateFormat.toDate());
     }
 
 

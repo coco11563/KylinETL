@@ -1,5 +1,12 @@
 package HbaseImporter;
+
 import HbaseUtil.HbaseOperation;
+import StarModelBuilder.CheckIn;
+import StarModelBuilder.Location.City;
+import StarModelBuilder.Location.Country;
+import StarModelBuilder.Location.Province;
+import StarModelBuilder.Time.Time;
+import StarModelBuilder.User.User;
 import jcifs.smb.SmbFile;
 
 
@@ -101,12 +108,30 @@ public class HbaseImporter {
                     HbaseOperation.create(TableName, columnFamily);
                     HTable cityTable = new HTable(cfg, TableName);
                     ArrayList<Put> putDateList = new ArrayList<>();
+                    Time time;
+                    City city;
+                    Country country;
+                    Province province;
+                    User user;
+                    CheckIn checkIn;
                     for (int rownum = 0; rownum < inputjson.size(); rownum++)//按行数遍历
                     {
-                        HbaseCeller hbaseCeller = new HbaseCeller(inputjson.getJSONObject(rownum));
+                        JSONObject jcell = inputjson.getJSONObject(rownum);
+                        HbaseCeller hbaseCeller = new HbaseCeller(jcell);
                         Put p1;
+                        rowKey rowKey = hbaseCeller.getRowKey();
+                        OtherInform otherInform = hbaseCeller.getOtherInform();
+                        //分装Celler
+                        time = new Time(rowKey.dateFormat.toDate());
+                        city = new City(rowKey.city_name, rowKey.city_id);
+                        province = new Province(rowKey.province_name, rowKey.province_id);
+                        country = new Country(rowKey.country_name, rowKey.country_id);
+                        user = new User(rowKey.user_id, otherInform.getGender());
+                        checkIn = new CheckIn(rowKey.weibo_id, rowKey.geo_Hash,
+                                otherInform.getContent(), jcell.toString(),
+                                city, province, country, time, user);
                         //插入流写入
-                        p1 = HbaseOperation.put(hbaseCeller, columnFamily);
+                        p1 = HbaseOperation.put("weibodata.check_in_table",);
 
                         putDateList.add(p1);
                         if (putDateList.size() > 1000) {

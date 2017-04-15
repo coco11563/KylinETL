@@ -87,7 +87,7 @@ public class HbaseOperation {
      * @return put
      * @throws Exception
      */
-    public static Put put(String tablename, String row,String columnFamily,HashMap<String,String> array )
+    public static Put put(String tablename, String row,String columnFamily, HashMap<String,String> array )
             throws Exception {
         Put p1 = new Put(Bytes.toBytes(row));
         Set<String> keyset = array.keySet();

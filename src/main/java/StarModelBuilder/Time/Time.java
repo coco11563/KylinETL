@@ -1,5 +1,6 @@
 package StarModelBuilder.Time;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -13,19 +14,25 @@ public class Time {
     private String day;
     private String is_holiday;
     private String time_id;
-
+    public Time(Date date) {
+        setYear(String.valueOf(date.getYear()));
+        setMonth(String.valueOf(date.getMonth()));
+        setDay(String.valueOf(date.getDate()));
+        setDate(date);
+        setTime_id(String.valueOf(date.getTime()));
+    }
     public Time(String year, String month, String day, String is_holiday, Date date) {
         setDate(date);
         setDay(day);
         setIs_holiday(is_holiday);
         setMonth(month);
         setYear(year);
-        generateId();
+        generateId(date);
     }
 
-    private void generateId() {
+    private void generateId(Date date) {
         // TODO Auto-generated catch block
-        String id = "";
+        String id = String.valueOf(date.getTime());
         setTime_id(id);
     }
 

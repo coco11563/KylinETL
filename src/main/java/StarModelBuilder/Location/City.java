@@ -12,6 +12,11 @@ public class City {
         setName(name);
         setId(inial.getCity_id(name));
     }
+
+    public City(String name, String id) {
+        setId(id);
+        setName(name);
+    }
     public String getId() {
         return id;
     }

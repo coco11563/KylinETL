@@ -10,6 +10,10 @@ public class Country {
         setName(name);
         setId("00");
     }
+    public Country(String name, String id) {
+        setId(id);
+        setName(name);
+    }
     public String getId() {
         return id;
     }

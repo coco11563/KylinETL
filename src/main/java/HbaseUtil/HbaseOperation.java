@@ -1,6 +1,13 @@
 package HbaseUtil;
 
+import HbaseImporter.DatePart.dateUtil;
 import HbaseImporter.HbaseCeller;
+import StarModelBuilder.CheckIn;
+import StarModelBuilder.Location.City;
+import StarModelBuilder.Location.Country;
+import StarModelBuilder.Location.Province;
+import StarModelBuilder.Time.Time;
+import StarModelBuilder.User.User;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
@@ -9,6 +16,7 @@ import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -162,6 +170,54 @@ public class HbaseOperation {
         }
         admin.close();
     }
-
-
+    public static Put putTime(Time time){
+        String columnFamily = "time_id";
+        Put p1 = new Put(Bytes.toBytes(time.getTime_id()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("year"), Bytes.toBytes(time.getYear()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("month"), Bytes.toBytes(time.getMonth()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("day"), Bytes.toBytes(time.getDay()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("is_holiday"), Bytes.toBytes(time.getIs_holiday()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("date_time"), Bytes.toBytes(dateBuilder(time.getDate())));
+        return p1;
+    }
+    public static String dateBuilder(Date date) {
+        return dateUtil.format(date);
+    }
+    public static Put putCity(City city) {
+        String columnFamily = "city_id";
+        Put p1 = new Put(Bytes.toBytes(city.getId()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("city_name"), Bytes.toBytes(city.getName()));
+        return p1;
+    }
+    public static Put putProvince(Province province) {
+        String columnFamily = "province_id";
+        Put p1 = new Put(Bytes.toBytes(province.getId()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("province_name"), Bytes.toBytes(province.getName()));
+        return p1;
+    }
+    public static Put putCountry(Country country) {
+        String columnFamily = "country_id";
+        Put p1 = new Put(Bytes.toBytes(country.getId()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("country_name"), Bytes.toBytes(country.getName()));
+        return p1;
+    }
+    public static Put putUser(User user) {
+        String columnFamily = "user_id";
+        Put p1 = new Put(Bytes.toBytes(user.getUser_id()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("gender"), Bytes.toBytes(user.getGender()));
+        return p1;
+    }
+    public static Put putCheckIn(CheckIn checkIn){
+        String columnFamily = "weibo_id";
+        Put p1 = new Put(Bytes.toBytes(checkIn.getWeibo_id()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("geohash"), Bytes.toBytes(checkIn.getGeoHash()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("content"), Bytes.toBytes(checkIn.getContent()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("json_file"), Bytes.toBytes(checkIn.getJson_file()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("user_id"), Bytes.toBytes(checkIn.getUid()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("time_id"), Bytes.toBytes(checkIn.getTid()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("city_id"), Bytes.toBytes(checkIn.getCid()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("province_id"), Bytes.toBytes(checkIn.getPid()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("country_id"), Bytes.toBytes(checkIn.getCoid()));
+        return p1;
+    }
 }

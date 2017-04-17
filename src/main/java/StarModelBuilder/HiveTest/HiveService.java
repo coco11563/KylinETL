@@ -78,4 +78,16 @@ public class HiveService {
             e.printStackTrace();
         }
     }
+
+    public static boolean sqlExcute(String sql, Connection conn) {
+        Statement stmt = null;
+        boolean res = false;
+        try {
+            stmt = conn.createStatement();
+            res = stmt.execute(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
 }

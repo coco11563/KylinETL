@@ -33,8 +33,7 @@ import java.util.List;
 
 
 import static HbaseImporter.ZipPart.GetFileStatus.showAllFiles;
-
-import static HbaseUtil.HbaseOperation.columnFamily;
+import static HbaseUtil.HbaseOperation.*;
 
 public class HbaseImporter {
     private final static String cityNumPath = "./src/main/conf/cityNum.json";
@@ -49,6 +48,13 @@ public class HbaseImporter {
 
     private static String TableName = "SinaWeiboDataStorage";
     //log4j initial
+
+    private static String cityTable = "weibodata.city_table";
+    private static String provinceTable = "weibodata.province_table";
+    private static String countryTable = "weibodata.country_table";
+    private static String checkinTable = "weibodata.check_in_table";
+    private static String timeTable = "weibodata.time_table";
+    private static String userTable = "weibodata.user_table";
 
     private static Logger logger = Logger.getLogger(HbaseImporter.class);
 
@@ -105,20 +111,35 @@ public class HbaseImporter {
                     SmbFile remotefs = new SmbFile(filestatu);
                     inputjson = Read.read_jsonFile(remotefs, "utf-8");
                     stornum += inputjson.size();
-                    HbaseOperation.create(TableName, columnFamily);
-                    HTable cityTable = new HTable(cfg, TableName);
-                    ArrayList<Put> putDateList = new ArrayList<>();
+                    HTable _cityTable = new HTable(cfg, cityTable);
+                    HTable _provinceTable = new HTable(cfg, provinceTable);
+                    HTable _countryTable = new HTable(cfg, countryTable);
+                    HTable _checkinTable = new HTable(cfg, checkinTable);
+                    HTable _timeTable = new HTable(cfg, timeTable);
+                    HTable _userTable = new HTable(cfg, userTable);
+                    ArrayList<Put> putCityList = new ArrayList<>();
+                    ArrayList<Put> putProvinceList = new ArrayList<>();
+                    ArrayList<Put> putCountryList = new ArrayList<>();
+                    ArrayList<Put> putTimeList = new ArrayList<>();
+                    ArrayList<Put> putUserList = new ArrayList<>();
+                    ArrayList<Put> putCheckInList = new ArrayList<>();
                     Time time;
                     City city;
                     Country country;
                     Province province;
                     User user;
                     CheckIn checkIn;
+                    Put ptime;
+                    Put pcity;
+                    Put pprovince;
+                    Put pcountry;
+                    Put puser;
+                    Put pcheckin;
                     for (int rownum = 0; rownum < inputjson.size(); rownum++)//按行数遍历
                     {
                         JSONObject jcell = inputjson.getJSONObject(rownum);
                         HbaseCeller hbaseCeller = new HbaseCeller(jcell);
-                        Put p1;
+
                         rowKey rowKey = hbaseCeller.getRowKey();
                         OtherInform otherInform = hbaseCeller.getOtherInform();
                         //分装Celler
@@ -131,21 +152,65 @@ public class HbaseImporter {
                                 otherInform.getContent(), jcell.toString(),
                                 city, province, country, time, user);
                         //插入流写入
-                        p1 = HbaseOperation.put("weibodata.check_in_table",);
-
-                        putDateList.add(p1);
-                        if (putDateList.size() > 1000) {
-                            cityTable.put(putDateList);
-                            cityTable.flushCommits();
-                            putDateList.clear();
+                        ptime = putTime(time);
+                        pcity = putCity(city);
+                        pprovince = putProvince(province);
+                        pcountry = putCountry(country);
+                        puser = putUser(user);
+                        pcheckin = putCheckIn(checkIn);
+                        putTimeList.add(ptime);
+                        putCheckInList.add(pcheckin);
+                        putUserList.add(puser);
+                        putCountryList.add(pcountry);
+                        putProvinceList.add(pprovince);
+                        putCityList.add(pcity);
+                        if (putCheckInList.size() > 1000) {
+                            _cityTable.put(putCityList);
+                            _checkinTable.put(putCheckInList);
+                            _countryTable.put(putCountryList);
+                            _provinceTable.put(putProvinceList);
+                            _timeTable.put(putTimeList);
+                            _userTable.put(putUserList);
+                            _cityTable.flushCommits();
+                            _checkinTable.flushCommits();
+                            _countryTable.flushCommits();
+                            _provinceTable.flushCommits();
+                            _timeTable.flushCommits();
+                            _userTable.flushCommits();
+                            putCheckInList.clear();
+                            putCityList.clear();
+                            putCountryList.clear();
+                            putProvinceList.clear();
+                            putTimeList.clear();
+                            putUserList.clear();
                             logger.debug("进行一次写入");
                         }
                     }
-                    cityTable.put(putDateList);
-                    cityTable.flushCommits();
-                    putDateList.clear();
+                    _cityTable.put(putCityList);
+                    _checkinTable.put(putCheckInList);
+                    _countryTable.put(putCountryList);
+                    _provinceTable.put(putProvinceList);
+                    _timeTable.put(putTimeList);
+                    _userTable.put(putUserList);
+                    _cityTable.flushCommits();
+                    _checkinTable.flushCommits();
+                    _countryTable.flushCommits();
+                    _provinceTable.flushCommits();
+                    _timeTable.flushCommits();
+                    _userTable.flushCommits();
+                    putCheckInList.clear();
+                    putCityList.clear();
+                    putCountryList.clear();
+                    putProvinceList.clear();
+                    putTimeList.clear();
+                    putUserList.clear();
                     logger.debug("结尾处进行一次写入");
-                    cityTable.close();
+                    _cityTable.close();
+                    _provinceTable.close();
+                    _checkinTable.close();
+                    _countryTable.close();
+                    _timeTable.close();
+                    _userTable.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

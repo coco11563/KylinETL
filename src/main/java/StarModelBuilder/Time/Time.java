@@ -1,5 +1,9 @@
 package StarModelBuilder.Time;
 
+import HbaseImporter.DatePart.dateUtil;
+import HbaseImporter.HolidayPart.ChineseHoliday;
+
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -8,27 +12,25 @@ import java.util.Date;
  */
 public class Time {
 
-    private Date date;
+    private String date;
     private String year;
     private String month;
     private String day;
     private String is_holiday;
     private String time_id;
-    public Time(Date date) {
-        setYear(String.valueOf(date.getYear()));
-        setMonth(String.valueOf(date.getMonth()));
-        setDay(String.valueOf(date.getDate()));
-        setDate(date);
-        setTime_id(String.valueOf(date.getTime()));
+
+    public Time(Date date) throws ParseException {
+        String dateStr = dateUtil.format(date);
+        String[] dateSegment = dateStr.split(" ")[0].split("-");
+        setYear(dateSegment[0]);
+        setMonth(dateSegment[1]);
+        setDay(dateSegment[2]);
+        setDate(dateUtil.formatFromNormal(date));
+        setTime_id(String.valueOf(dateUtil.parseFromNormal(this.date).getTime()));
+        setIs_holiday(String.valueOf(ChineseHoliday.getHoliday(date)));
+
     }
-    public Time(String year, String month, String day, String is_holiday, Date date) {
-        setDate(date);
-        setDay(day);
-        setIs_holiday(is_holiday);
-        setMonth(month);
-        setYear(year);
-        generateId(date);
-    }
+
 
     private void generateId(Date date) {
         // TODO Auto-generated catch block
@@ -76,11 +78,13 @@ public class Time {
         this.year = year;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
+
+
 }

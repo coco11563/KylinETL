@@ -1,10 +1,13 @@
 package StarModelBuilder;
 
+import HbaseImporter.DatePart.dateUtil;
 import StarModelBuilder.Location.City;
 import StarModelBuilder.Location.Country;
 import StarModelBuilder.Location.Province;
 import StarModelBuilder.Time.Time;
 import StarModelBuilder.User.User;
+
+import java.util.Date;
 
 /**
  * Created by Sha0w on 2017/4/15.
@@ -19,7 +22,8 @@ public class CheckIn {
     private String coid;
     private String tid;
     private String pid;
-    public CheckIn(String weibo_id, String geoHash, String content, String json_file, City city, Province province, Country country, Time time, User user) {
+    private String unix_time;
+    public CheckIn(String weibo_id, String geoHash, String content, String json_file, City city, Province province, Country country, Time time, User user, Date date) {
         setWeibo_id(weibo_id);
         setGeoHash(geoHash);
         setContent(content);
@@ -29,6 +33,7 @@ public class CheckIn {
         setCoid(country.getId());
         setTid(time.getTime_id());
         setUid(user.getUser_id());
+        setUnix_time(dateUtil.format(date));
     }
     public String getWeibo_id() {
         return weibo_id;
@@ -100,5 +105,12 @@ public class CheckIn {
 
     public void setPid(String pid) {
         this.pid = pid;
+    }
+    public String getUnix_time() {
+        return unix_time;
+    }
+
+    public void setUnix_time(String unix_time) {
+        this.unix_time = unix_time;
     }
 }

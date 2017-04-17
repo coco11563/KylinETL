@@ -7,6 +7,7 @@ import StarModelBuilder.Time.Time;
 import org.apache.hadoop.fs.shell.Count;
 import org.junit.Test;
 
+import java.text.ParseException;
 import java.util.Date;
 
 /**
@@ -29,7 +30,7 @@ public class BeanTest {
         System.out.println(city.getId());
     }
     @Test
-    public void TimeGen() {
+    public void TimeGen() throws ParseException {
         Time time = new Time(new Date());
         System.out.println(time.getDate().toString() + "," + time.getTime_id() + "," + time.getDay());
     }

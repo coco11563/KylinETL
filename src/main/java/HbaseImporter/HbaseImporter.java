@@ -150,7 +150,7 @@ public class HbaseImporter {
                         user = new User(rowKey.user_id, otherInform.getGender());
                         checkIn = new CheckIn(rowKey.weibo_id, rowKey.geo_Hash,
                                 otherInform.getContent(), jcell.toString(),
-                                city, province, country, time, user);
+                                city, province, country, time, user, rowKey.dateFormat.toDate());
                         //≤Â»Î¡˜–¥»Î
                         ptime = putTime(time);
                         pcity = putCity(city);

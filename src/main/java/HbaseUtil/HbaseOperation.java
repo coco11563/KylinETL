@@ -177,11 +177,11 @@ public class HbaseOperation {
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("month"), Bytes.toBytes(time.getMonth()));
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("day"), Bytes.toBytes(time.getDay()));
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("is_holiday"), Bytes.toBytes(time.getIs_holiday()));
-        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("date_time"), Bytes.toBytes(dateBuilder(time.getDate())));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("date_time"), Bytes.toBytes(time.getDate()));
         return p1;
     }
     public static String dateBuilder(Date date) {
-        return dateUtil.format(date);
+        return dateUtil.formatFromNormal(date);
     }
     public static Put putCity(City city) {
         String columnFamily = "city_id";
@@ -218,6 +218,7 @@ public class HbaseOperation {
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("city_id"), Bytes.toBytes(checkIn.getCid()));
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("province_id"), Bytes.toBytes(checkIn.getPid()));
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("country_id"), Bytes.toBytes(checkIn.getCoid()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("unix_time"), Bytes.toBytes(checkIn.getUnix_time()));
         return p1;
     }
 }

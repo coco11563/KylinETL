@@ -71,7 +71,7 @@ public class rowKey {
                         this.province_name = cityInform[0];
                         this.province_id = inial.getProvince_id(cityInform[0]);
                         this.city_id = inial.getCity_id(cityInform[1]);
-                        logger.error(country_id + "_" + province_id + "_" + city_id);
+//                        logger.error(country_id + "_" + province_id + "_" + city_id);
                     }
                 } else {
                     String[] cityInform = getCity(lat, lng) ;
@@ -81,7 +81,7 @@ public class rowKey {
                     this.province_name = cityInform[0];
                     this.province_id = inial.getProvince_id(cityInform[0]);
                     this.city_id = inial.getCity_id(cityInform[1]);
-                    logger.error(country_id + "_" + province_id + "_" + city_id);
+//                    logger.error(country_id + "_" + province_id + "_" + city_id);
                 }
             } else {
                 String[] cityInform = getCity(lat, lng) ;
@@ -91,7 +91,7 @@ public class rowKey {
                 this.province_name = cityInform[0];
                 this.province_id = inial.getProvince_id(cityInform[0]);
                 this.city_id = inial.getCity_id(cityInform[1]);
-                logger.error(country_id + "_" + province_id + "_" + city_id);
+//                logger.error(country_id + "_" + province_id + "_" + city_id);
             }
         } else {
             String[] cityInform = getCity(lat, lng) ;
@@ -101,7 +101,16 @@ public class rowKey {
             this.province_name = cityInform[0];
             this.province_id = inial.getProvince_id(cityInform[0]);
             this.city_id = inial.getCity_id(cityInform[1]);
-            logger.error(country_id + "_" + province_id + "_" + city_id);
+//            logger.error(country_id + "_" + province_id + "_" + city_id);
+        }
+        if (this.city_id == null || this.province_id == null) {
+            String[] cityInform = getCity(lat, lng) ;
+            this.country_id = "00";
+            this.country_name = "ÖÐ¹ú";
+            this.city_name = cityInform[1];
+            this.province_name = cityInform[0];
+            this.province_id = inial.getProvince_id(cityInform[0]);
+            this.city_id = inial.getCity_id(cityInform[1]);
         }
         this.geo_Hash = new GeoHash(lat, lng).getGeoHashBase32();
         this.user_id = weiboInform.getJSONObject("user").getString("id");

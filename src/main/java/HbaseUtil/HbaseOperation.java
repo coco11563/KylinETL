@@ -185,8 +185,14 @@ public class HbaseOperation {
     }
     public static Put putCity(City city) {
         String columnFamily = "city_id";
-        Put p1 = new Put(Bytes.toBytes(city.getId()));
-        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("city_name"), Bytes.toBytes(city.getName()));
+        Put p1 = null;
+        try {
+            p1 = new Put(Bytes.toBytes(city.getId()));
+            p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("city_name"), Bytes.toBytes(city.getName()));
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
         return p1;
     }
     public static Put putProvince(Province province) {
@@ -205,6 +211,7 @@ public class HbaseOperation {
         String columnFamily = "user_id";
         Put p1 = new Put(Bytes.toBytes(user.getUser_id()));
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("gender"), Bytes.toBytes(user.getGender()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("user_name"), Bytes.toBytes(user.getUsername()));
         return p1;
     }
     public static Put putCheckIn(CheckIn checkIn){
@@ -219,6 +226,7 @@ public class HbaseOperation {
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("province_id"), Bytes.toBytes(checkIn.getPid()));
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("country_id"), Bytes.toBytes(checkIn.getCoid()));
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("unix_time"), Bytes.toBytes(checkIn.getUnix_time()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("pic_url"), Bytes.toBytes(checkIn.getPic_Url()));
         return p1;
     }
 }

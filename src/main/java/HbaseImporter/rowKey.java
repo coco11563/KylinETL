@@ -49,7 +49,7 @@ public class rowKey {
     public rowKey(JSONObject weiboInform, Inial inial) throws JSONException, ParseException, KeySizeException {
         double lat = weiboInform.getJSONObject("geo").getJSONArray("coordinates").getDouble(0);
         double lng = weiboInform.getJSONObject("geo").getJSONArray("coordinates").getDouble(1);
-        JSONArray url_object = weiboInform.getJSONArray("url_objects");
+        JSONArray url_object = weiboInform.optJSONArray("url_objects");
         if (url_object != null) {
             JSONObject object_1 = getObject_1(url_object);
             if (object_1 != null) {
@@ -103,7 +103,9 @@ public class rowKey {
             this.city_id = inial.getCity_id(cityInform[1]);
 //            logger.error(country_id + "_" + province_id + "_" + city_id);
         }
-        if (this.city_id == null || this.province_id == null) {
+        if (this.city_id == null || this.province_id == null || this.country_id == null) {
+//            logger.error("出现一个url_obj为空");
+//            logger.error(weiboInform.toString());
             String[] cityInform = getCity(lat, lng) ;
             this.country_id = "00";
             this.country_name = "中国";
@@ -149,6 +151,7 @@ public class rowKey {
         if (jsonArray.size() <= 0) {
             return null;
         }
+
         JSONObject ret = jsonArray.optJSONObject(0).optJSONObject("object");
         if (ret == null) {
             JSONObject jsonarray_1 = jsonArray.optJSONObject(1);

@@ -98,6 +98,7 @@ public class HbaseImporter {
                 continue;
             }
             List<String> filestatus = showAllFiles(fs);
+            SmbFile remotefs;
             for (String filestatu : filestatus) {//按城市遍历
 
                 if (filestatu.split("/").length == 8) {
@@ -108,7 +109,8 @@ public class HbaseImporter {
                     logger.debug("表名:" + TableName);
                 }
                 try {
-                    SmbFile remotefs = new SmbFile(filestatu);
+                    remotefs = new SmbFile(filestatu);
+                    remotefs.setConnectTimeout(600000);
                     inputjson = Read.read_jsonFile(remotefs, "utf-8");
                     stornum += inputjson.size();
                     HTable _cityTable = new HTable(cfg, cityTable);
@@ -147,10 +149,10 @@ public class HbaseImporter {
                         city = new City(rowKey.city_name, rowKey.city_id);
                         province = new Province(rowKey.province_name, rowKey.province_id);
                         country = new Country(rowKey.country_name, rowKey.country_id);
-                        user = new User(rowKey.user_id, otherInform.getGender());
+                        user = new User(rowKey.user_id, otherInform.getGender(), otherInform.getUsername());
                         checkIn = new CheckIn(rowKey.weibo_id, rowKey.geo_Hash,
                                 otherInform.getContent(), jcell.toString(),
-                                city, province, country, time, user, rowKey.dateFormat.toDate());
+                                city, province, country, time, user, rowKey.dateFormat.toDate(), otherInform.getPicURL());
                         //插入流写入
                         ptime = putTime(time);
                         pcity = putCity(city);

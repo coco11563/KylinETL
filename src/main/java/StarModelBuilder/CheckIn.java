@@ -23,7 +23,8 @@ public class CheckIn {
     private String tid;
     private String pid;
     private String unix_time;
-    public CheckIn(String weibo_id, String geoHash, String content, String json_file, City city, Province province, Country country, Time time, User user, Date date) {
+    private String pic_Url;
+    public CheckIn(String weibo_id, String geoHash, String content, String json_file, City city, Province province, Country country, Time time, User user, Date date, String pic_Url) {
         setWeibo_id(weibo_id);
         setGeoHash(geoHash);
         setContent(content);
@@ -34,6 +35,11 @@ public class CheckIn {
         setTid(time.getTime_id());
         setUid(user.getUser_id());
         setUnix_time(dateUtil.format(date));
+        if (pic_Url == null) {
+            setPic_Url("0");
+        } else {
+            setPic_Url(pic_Url);
+        }
     }
     public String getWeibo_id() {
         return weibo_id;
@@ -112,5 +118,13 @@ public class CheckIn {
 
     public void setUnix_time(String unix_time) {
         this.unix_time = unix_time;
+    }
+
+    public String getPic_Url() {
+        return pic_Url;
+    }
+
+    public void setPic_Url(String pic_Url) {
+        this.pic_Url = pic_Url;
     }
 }

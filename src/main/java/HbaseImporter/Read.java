@@ -235,7 +235,6 @@ public class Read {
 		JSONArray json_array = new JSONArray ( ) ;
 		SmbFileInputStream reader = null;
 		InputStreamReader isr = null ;
-		StringBuffer data = new StringBuffer();
 		try{
 			reader =  new SmbFileInputStream(file);
 			//返回值,使用StringBuffer
@@ -249,8 +248,6 @@ public class Read {
 				json_array.element ( JSONObject.fromObject ( line ) ) ;
 			}
 
-		}catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

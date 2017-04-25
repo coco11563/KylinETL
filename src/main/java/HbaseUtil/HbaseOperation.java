@@ -217,16 +217,18 @@ public class HbaseOperation {
     public static Put putCheckIn(CheckIn checkIn){
         String columnFamily = "weibo_id";
         Put p1 = new Put(Bytes.toBytes(checkIn.getWeibo_id()));
-        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("geohash"), Bytes.toBytes(checkIn.getGeoHash()));
-        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("content"), Bytes.toBytes(checkIn.getContent()));
-        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("json_file"), Bytes.toBytes(checkIn.getJson_file()));
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("user_id"), Bytes.toBytes(checkIn.getUid()));
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("time_id"), Bytes.toBytes(checkIn.getTid()));
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("city_id"), Bytes.toBytes(checkIn.getCid()));
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("province_id"), Bytes.toBytes(checkIn.getPid()));
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("country_id"), Bytes.toBytes(checkIn.getCoid()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("geohash"), Bytes.toBytes(checkIn.getGeoHash()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("content"), Bytes.toBytes(checkIn.getContent()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("json_file"), Bytes.toBytes(checkIn.getJson_file()));
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("unix_time"), Bytes.toBytes(checkIn.getUnix_time()));
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("pic_url"), Bytes.toBytes(checkIn.getPic_Url()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("lat"), Bytes.toBytes(checkIn.getLat()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("lon"), Bytes.toBytes(checkIn.getLon()));
         return p1;
     }
 }

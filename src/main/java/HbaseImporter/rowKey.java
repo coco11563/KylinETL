@@ -46,9 +46,11 @@ public class rowKey {
     public String day;
     public int isHoliday;
     public dateFormat dateFormat;
+    public double lat;
+    public double lon;
     public rowKey(JSONObject weiboInform, Inial inial) throws JSONException, ParseException, KeySizeException {
-        double lat = weiboInform.getJSONObject("geo").getJSONArray("coordinates").getDouble(0);
-        double lng = weiboInform.getJSONObject("geo").getJSONArray("coordinates").getDouble(1);
+         lat = weiboInform.getJSONObject("geo").getJSONArray("coordinates").getDouble(0);
+         lon = weiboInform.getJSONObject("geo").getJSONArray("coordinates").getDouble(1);
         JSONArray url_object = weiboInform.optJSONArray("url_objects");
         if (url_object != null) {
             JSONObject object_1 = getObject_1(url_object);
@@ -64,7 +66,7 @@ public class rowKey {
                         this.city_id = inial.getCity_id(city_name);
                         this.province_id = inial.getProvince_id(province_name);
                     } else {
-                        String[] cityInform = getCity(lat, lng) ;
+                        String[] cityInform = getCity(lat, lon) ;
                         this.country_id = "00";
                         this.country_name = "中国";
                         this.city_name = cityInform[1];
@@ -74,7 +76,7 @@ public class rowKey {
 //                        logger.error(country_id + "_" + province_id + "_" + city_id);
                     }
                 } else {
-                    String[] cityInform = getCity(lat, lng) ;
+                    String[] cityInform = getCity(lat, lon) ;
                     this.country_id = "00";
                     this.country_name = "中国";
                     this.city_name = cityInform[1];
@@ -84,7 +86,7 @@ public class rowKey {
 //                    logger.error(country_id + "_" + province_id + "_" + city_id);
                 }
             } else {
-                String[] cityInform = getCity(lat, lng) ;
+                String[] cityInform = getCity(lat, lon) ;
                 this.country_id = "00";
                 this.country_name = "中国";
                 this.city_name = cityInform[1];
@@ -94,7 +96,7 @@ public class rowKey {
 //                logger.error(country_id + "_" + province_id + "_" + city_id);
             }
         } else {
-            String[] cityInform = getCity(lat, lng) ;
+            String[] cityInform = getCity(lat, lon) ;
             this.country_id = "00";
             this.country_name = "中国";
             this.city_name = cityInform[1];
@@ -106,7 +108,7 @@ public class rowKey {
         if (this.city_id == null || this.province_id == null || this.country_id == null) {
 //            logger.error("出现一个url_obj为空");
 //            logger.error(weiboInform.toString());
-            String[] cityInform = getCity(lat, lng) ;
+            String[] cityInform = getCity(lat, lon) ;
             this.country_id = "00";
             this.country_name = "中国";
             this.city_name = cityInform[1];
@@ -114,7 +116,7 @@ public class rowKey {
             this.province_id = inial.getProvince_id(cityInform[0]);
             this.city_id = inial.getCity_id(cityInform[1]);
         }
-        this.geo_Hash = new GeoHash(lat, lng).getGeoHashBase32();
+        this.geo_Hash = new GeoHash(lat, lon).getGeoHashBase32();
         this.user_id = weiboInform.getJSONObject("user").getString("id");
         this.weibo_id = weiboInform.getString("idstr");
         String[] date = weiboInform.getString("created_at").split(" ");

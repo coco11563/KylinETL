@@ -176,7 +176,7 @@ public class ImportThread implements Runnable {
                 user = new User(rowKey.user_id, otherInform.getGender(), otherInform.getUsername());
                 checkIn = new CheckIn(rowKey.weibo_id, rowKey.geo_Hash,
                         otherInform.getContent(), jcell.toString(),
-                        city, province, country, time, user, rowKey.dateFormat.toDate(), otherInform.getPicURL());
+                        city, province, country, time, user, rowKey.dateFormat.toDate(), otherInform.getPicURL(),rowKey.lat,rowKey.lon);
                 //≤Â»Î¡˜–¥»Î
 //                ptime = putTime(time);
 //                pcity = putCity(city);

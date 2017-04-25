@@ -13,6 +13,8 @@ import java.util.Date;
  * Created by Sha0w on 2017/4/15.
  */
 public class CheckIn {
+    private double lat;
+    private double lon;
     private String weibo_id;
     private String geoHash;
     private String content;
@@ -24,7 +26,7 @@ public class CheckIn {
     private String pid;
     private String unix_time;
     private String pic_Url;
-    public CheckIn(String weibo_id, String geoHash, String content, String json_file, City city, Province province, Country country, Time time, User user, Date date, String pic_Url) {
+    public CheckIn(String weibo_id, String geoHash, String content, String json_file, City city, Province province, Country country, Time time, User user, Date date, String pic_Url, double lat, double lon) {
         setWeibo_id(weibo_id);
         setGeoHash(geoHash);
         setContent(content);
@@ -35,6 +37,8 @@ public class CheckIn {
         setTid(time.getTime_id());
         setUid(user.getUser_id());
         setUnix_time(dateUtil.format(date));
+        setLat(lat);
+        setLon(lon);
         if (pic_Url == null) {
             setPic_Url("0");
         } else {
@@ -126,5 +130,21 @@ public class CheckIn {
 
     public void setPic_Url(String pic_Url) {
         this.pic_Url = pic_Url;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLon() {
+        return lon;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
     }
 }

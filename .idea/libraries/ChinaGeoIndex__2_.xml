@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="ChinaGeoIndex (2)">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src/main/resources/lib/ChinaGeoIndex.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/main/resources/lib/json-lib-2.4-jdk15.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

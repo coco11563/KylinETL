@@ -62,12 +62,19 @@ public class ImportThread implements Runnable {
         _timeTable = inialTimeTable();
         _userTable = inialUserTable();
     }
-    public final static ThreadLocal<HTable> cityTableLocal = new ThreadLocal<>();
-    public final static ThreadLocal<HTable> provinceTableLocal = new ThreadLocal<>();
-    public final static ThreadLocal<HTable> countryTableLocal = new ThreadLocal<>();
-    public final static ThreadLocal<HTable> checkinTableLocal = new ThreadLocal<>();
-    public final static ThreadLocal<HTable> timeTableLocal = new ThreadLocal<>();
-    public final static ThreadLocal<HTable> userTableLocal = new ThreadLocal<>();
+    //声明TL存储共享的Htable
+    private final static ThreadLocal<HTable> cityTableLocal = new ThreadLocal<>();
+    private final static ThreadLocal<HTable> provinceTableLocal = new ThreadLocal<>();
+    private final static ThreadLocal<HTable> countryTableLocal = new ThreadLocal<>();
+    private final static ThreadLocal<HTable> checkinTableLocal = new ThreadLocal<>();
+    private final static ThreadLocal<HTable> timeTableLocal = new ThreadLocal<>();
+    private final static ThreadLocal<HTable> userTableLocal = new ThreadLocal<>();
+//    private final ArrayList<Put> putCityList = new ArrayList<>();
+//    private final ArrayList<Put> putProvinceList = new ArrayList<>();
+//    private final ArrayList<Put> putCountryList = new ArrayList<>();
+//    private final ArrayList<Put> putTimeList = new ArrayList<>();
+//    private final ArrayList<Put> putUserList = new ArrayList<>();
+    private final ArrayList<Put> putCheckInList = new ArrayList<>();
     @Override
     public void run() {
 //        String times = Integer.toString(iter);
@@ -142,23 +149,18 @@ public class ImportThread implements Runnable {
         try {
             inputjson = Read.read_jsonFile(remotefs, "utf-8");
 //            stornum .addAndGet( inputjson.size() );
-            ArrayList<Put> putCityList = new ArrayList<>();
-            ArrayList<Put> putProvinceList = new ArrayList<>();
-            ArrayList<Put> putCountryList = new ArrayList<>();
-            ArrayList<Put> putTimeList = new ArrayList<>();
-            ArrayList<Put> putUserList = new ArrayList<>();
-            ArrayList<Put> putCheckInList = new ArrayList<>();
+
             Time time;
             City city;
             Country country;
             Province province;
             User user;
             CheckIn checkIn;
-            Put ptime;
-            Put pcity;
-            Put pprovince;
-            Put pcountry;
-            Put puser;
+//            Put ptime;
+//            Put pcity;
+//            Put pprovince;
+//            Put pcountry;
+//            Put puser;
             Put pcheckin;
             for (int rownum = 0; rownum < inputjson.size(); rownum++)//按行数遍历
             {
@@ -176,58 +178,58 @@ public class ImportThread implements Runnable {
                         otherInform.getContent(), jcell.toString(),
                         city, province, country, time, user, rowKey.dateFormat.toDate(), otherInform.getPicURL());
                 //插入流写入
-                ptime = putTime(time);
-                pcity = putCity(city);
-                pprovince = putProvince(province);
-                pcountry = putCountry(country);
-                puser = putUser(user);
+//                ptime = putTime(time);
+//                pcity = putCity(city);
+//                pprovince = putProvince(province);
+//                pcountry = putCountry(country);
+//                puser = putUser(user);
                 pcheckin = putCheckIn(checkIn);
-                putTimeList.add(ptime);
+//                putTimeList.add(ptime);
                 putCheckInList.add(pcheckin);
-                putUserList.add(puser);
-                putCountryList.add(pcountry);
-                putProvinceList.add(pprovince);
-                putCityList.add(pcity);
+//                putUserList.add(puser);
+//                putCountryList.add(pcountry);
+//                putProvinceList.add(pprovince);
+//                putCityList.add(pcity);
                 if (putCheckInList.size() > 1000) {
-                    _cityTable.put(putCityList);
+//                    _cityTable.put(putCityList);
                     _checkinTable.put(putCheckInList);
-                    _countryTable.put(putCountryList);
-                    _provinceTable.put(putProvinceList);
-                    _timeTable.put(putTimeList);
-                    _userTable.put(putUserList);
-                    _cityTable.flushCommits();
+//                    _countryTable.put(putCountryList);
+//                    _provinceTable.put(putProvinceList);
+//                    _timeTable.put(putTimeList);
+//                    _userTable.put(putUserList);
+//                    _cityTable.flushCommits();
                     _checkinTable.flushCommits();
-                    _countryTable.flushCommits();
-                    _provinceTable.flushCommits();
-                    _timeTable.flushCommits();
-                    _userTable.flushCommits();
+//                    _countryTable.flushCommits();
+//                    _provinceTable.flushCommits();
+//                    _timeTable.flushCommits();
+//                    _userTable.flushCommits();
                     putCheckInList.clear();
-                    putCityList.clear();
-                    putCountryList.clear();
-                    putProvinceList.clear();
-                    putTimeList.clear();
-                    putUserList.clear();
+//                    putCityList.clear();
+//                    putCountryList.clear();
+//                    putProvinceList.clear();
+//                    putTimeList.clear();
+//                    putUserList.clear();
                     logger.debug("进行一次写入");
                 }
             }
-            _cityTable.put(putCityList);
+//            _cityTable.put(putCityList);
             _checkinTable.put(putCheckInList);
-            _countryTable.put(putCountryList);
-            _provinceTable.put(putProvinceList);
-            _timeTable.put(putTimeList);
-            _userTable.put(putUserList);
-            _cityTable.flushCommits();
+//            _countryTable.put(putCountryList);
+//            _provinceTable.put(putProvinceList);
+//            _timeTable.put(putTimeList);
+//            _userTable.put(putUserList);
+//            _cityTable.flushCommits();
             _checkinTable.flushCommits();
-            _countryTable.flushCommits();
-            _provinceTable.flushCommits();
-            _timeTable.flushCommits();
-            _userTable.flushCommits();
+//            _countryTable.flushCommits();
+//            _provinceTable.flushCommits();
+//            _timeTable.flushCommits();
+//            _userTable.flushCommits();
             putCheckInList.clear();
-            putCityList.clear();
-            putCountryList.clear();
-            putProvinceList.clear();
-            putTimeList.clear();
-            putUserList.clear();
+//            putCityList.clear();
+//            putCountryList.clear();
+//            putProvinceList.clear();
+//            putTimeList.clear();
+//            putUserList.clear();
             logger.debug("结尾处进行一次写入");
 //            _cityTable.close();
 //            _provinceTable.close();
@@ -242,12 +244,12 @@ public class ImportThread implements Runnable {
         }
     }
 
-
     private static HTable inialCityTable() {
         HTable cityTable = cityTableLocal.get();
         if (cityTable == null) {
             try {
                 cityTable = new HTable(cfg, ImportThread.cityTable);
+                cityTable.setAutoFlushTo(false);
                 cityTableLocal.set(cityTable);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -260,6 +262,7 @@ public class ImportThread implements Runnable {
         if (provincetable == null) {
             try {
                 provincetable = new HTable(cfg, ImportThread.provinceTable);
+                provincetable.setAutoFlushTo(false);
                 provinceTableLocal.set(provincetable);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -272,6 +275,7 @@ public class ImportThread implements Runnable {
         if (countryTable == null) {
             try {
                 countryTable = new HTable(cfg, ImportThread.countryTable);
+                countryTable.setAutoFlushTo(false);
                 countryTableLocal.set(countryTable);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -284,6 +288,7 @@ public class ImportThread implements Runnable {
         if (timeTable == null) {
             try {
                 timeTable = new HTable(cfg, ImportThread.timeTable);
+                timeTable.setAutoFlushTo(false);
                 timeTableLocal.set(timeTable);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -296,6 +301,7 @@ public class ImportThread implements Runnable {
         if (userTable == null) {
             try {
                 userTable = new HTable(cfg, ImportThread.userTable);
+                userTable.setAutoFlushTo(false);
                 userTableLocal.set(userTable);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -309,6 +315,7 @@ public class ImportThread implements Runnable {
         if (weiboTable == null) {
             try {
                 weiboTable = new HTable(cfg, ImportThread.checkinTable);
+                weiboTable.setAutoFlushTo(false);
                 checkinTableLocal.set(weiboTable);
             } catch (IOException e) {
                 e.printStackTrace();

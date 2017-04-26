@@ -11,8 +11,8 @@ import jcifs.smb.SmbFile;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
-import org.apache.hadoop.hbase.client.HTable;
-import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.*;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedWriter;
@@ -45,36 +45,31 @@ public class ImportThread implements Runnable {
     private static String timeTable = "weibodata.time_table";
     private static String userTable = "weibodata.user_table";
     private static Logger logger = Logger.getLogger(ImportThread.class);
-    private HTable _cityTable = null;
-    private HTable _provinceTable  = null;
-    private HTable _countryTable = null;
-    private HTable _checkinTable = null;
-    private HTable _timeTable = null;
-    private HTable _userTable = null;
+    private Table _cityTable = null;
+    private Table _provinceTable  = null;
+    private Table _countryTable = null;
+    private Table _checkinTable = null;
+    private Table _timeTable = null;
+    private Table _userTable = null;
     private String filestatu;
     private int iter;
     ImportThread(String filestatu) {
         this.filestatu = filestatu;
-        _cityTable = inialCityTable();
-        _provinceTable = inialProvinceTable();
-        _countryTable = inialCountryTable();
-        _checkinTable = inialWeiboTable();
-        _timeTable = inialTimeTable();
-        _userTable = inialUserTable();
+        _cityTable = getTable("city_table");
+        _provinceTable = getTable("province_table");
+        _countryTable = getTable("country_table");
+        _checkinTable = getTable("check_in_table");
+        _timeTable = getTable("time_table");
+        _userTable = getTable("user_table");
     }
-    //ÉùÃ÷TL´æ´¢¹²ÏíµÄHtable
-    private final static ThreadLocal<HTable> cityTableLocal = new ThreadLocal<>();
-    private final static ThreadLocal<HTable> provinceTableLocal = new ThreadLocal<>();
-    private final static ThreadLocal<HTable> countryTableLocal = new ThreadLocal<>();
-    private final static ThreadLocal<HTable> checkinTableLocal = new ThreadLocal<>();
-    private final static ThreadLocal<HTable> timeTableLocal = new ThreadLocal<>();
-    private final static ThreadLocal<HTable> userTableLocal = new ThreadLocal<>();
+    private final static ThreadLocal<Connection> connectionLocal = new ThreadLocal<>();
 //    private final ArrayList<Put> putCityList = new ArrayList<>();
 //    private final ArrayList<Put> putProvinceList = new ArrayList<>();
 //    private final ArrayList<Put> putCountryList = new ArrayList<>();
 //    private final ArrayList<Put> putTimeList = new ArrayList<>();
 //    private final ArrayList<Put> putUserList = new ArrayList<>();
     private final ArrayList<Put> putCheckInList = new ArrayList<>();
+
     @Override
     public void run() {
 //        String times = Integer.toString(iter);
@@ -198,11 +193,15 @@ public class ImportThread implements Runnable {
 //                    _timeTable.put(putTimeList);
 //                    _userTable.put(putUserList);
 //                    _cityTable.flushCommits();
-                    _checkinTable.flushCommits();
+
+
+//                    _checkinTable.flushCommits();
 //                    _countryTable.flushCommits();
 //                    _provinceTable.flushCommits();
 //                    _timeTable.flushCommits();
 //                    _userTable.flushCommits();
+
+
                     putCheckInList.clear();
 //                    putCityList.clear();
 //                    putCountryList.clear();
@@ -219,11 +218,15 @@ public class ImportThread implements Runnable {
 //            _timeTable.put(putTimeList);
 //            _userTable.put(putUserList);
 //            _cityTable.flushCommits();
-            _checkinTable.flushCommits();
+
+
+//            _checkinTable.flushCommits();
 //            _countryTable.flushCommits();
 //            _provinceTable.flushCommits();
 //            _timeTable.flushCommits();
 //            _userTable.flushCommits();
+
+
             putCheckInList.clear();
 //            putCityList.clear();
 //            putCountryList.clear();
@@ -243,84 +246,18 @@ public class ImportThread implements Runnable {
             e1.printStackTrace();
         }
     }
-
-    private static HTable inialCityTable() {
-        HTable cityTable = cityTableLocal.get();
-        if (cityTable == null) {
+    private static Table getTable(String tN) {
+        TableName tableName = TableName.valueOf(tN);
+        Connection connection = connectionLocal.get();
+        if (connection == null) {
             try {
-                cityTable = new HTable(cfg, ImportThread.cityTable);
-                cityTable.setAutoFlushTo(false);
-                cityTableLocal.set(cityTable);
+                connection = ConnectionFactory.createConnection(cfg);
+                connectionLocal.set(connection);
+                return connection.getTable(tableName);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return cityTable;
-    }
-    private static HTable inialProvinceTable() {
-        HTable provincetable = provinceTableLocal.get();
-        if (provincetable == null) {
-            try {
-                provincetable = new HTable(cfg, ImportThread.provinceTable);
-                provincetable.setAutoFlushTo(false);
-                provinceTableLocal.set(provincetable);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return provincetable;
-    }
-    private static HTable inialCountryTable() {
-        HTable countryTable = countryTableLocal.get();
-        if (countryTable == null) {
-            try {
-                countryTable = new HTable(cfg, ImportThread.countryTable);
-                countryTable.setAutoFlushTo(false);
-                countryTableLocal.set(countryTable);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return countryTable;
-    }
-    private static HTable inialTimeTable() {
-        HTable timeTable = timeTableLocal.get();
-        if (timeTable == null) {
-            try {
-                timeTable = new HTable(cfg, ImportThread.timeTable);
-                timeTable.setAutoFlushTo(false);
-                timeTableLocal.set(timeTable);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return timeTable;
-    }
-    private static HTable inialUserTable() {
-        HTable userTable = userTableLocal.get();
-        if (userTable == null) {
-            try {
-                userTable = new HTable(cfg, ImportThread.userTable);
-                userTable.setAutoFlushTo(false);
-                userTableLocal.set(userTable);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return userTable;
-    }
-
-    private static HTable inialWeiboTable() {
-        HTable weiboTable = checkinTableLocal.get();
-        if (weiboTable == null) {
-            try {
-                weiboTable = new HTable(cfg, ImportThread.checkinTable);
-                weiboTable.setAutoFlushTo(false);
-                checkinTableLocal.set(weiboTable);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return weiboTable;
+        return null;
     }
 }

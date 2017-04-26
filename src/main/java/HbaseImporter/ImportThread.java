@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 import static HbaseImporter.HbaseImporter.cfg;
 import static HbaseImporter.HbaseImporter.completeddate;
@@ -55,19 +56,19 @@ public class ImportThread implements Runnable {
     private int iter;
     ImportThread(String filestatu) {
         this.filestatu = filestatu;
-        _cityTable = getTable("city_table");
-        _provinceTable = getTable("province_table");
-        _countryTable = getTable("country_table");
-        _checkinTable = getTable("check_in_table");
-        _timeTable = getTable("time_table");
-        _userTable = getTable("user_table");
+        _cityTable = getTable(cityTable);
+        _provinceTable = getTable(provinceTable);
+        _countryTable = getTable(countryTable);
+        _checkinTable = getTable(checkinTable);
+        _timeTable = getTable(timeTable);
+        _userTable = getTable(userTable);
     }
     private final static ThreadLocal<Connection> connectionLocal = new ThreadLocal<>();
-//    private final ArrayList<Put> putCityList = new ArrayList<>();
-//    private final ArrayList<Put> putProvinceList = new ArrayList<>();
-//    private final ArrayList<Put> putCountryList = new ArrayList<>();
-//    private final ArrayList<Put> putTimeList = new ArrayList<>();
-//    private final ArrayList<Put> putUserList = new ArrayList<>();
+    private final ArrayList<Put> putCityList = new ArrayList<>();
+    private final ArrayList<Put> putProvinceList = new ArrayList<>();
+    private final ArrayList<Put> putCountryList = new ArrayList<>();
+    private final ArrayList<Put> putTimeList = new ArrayList<>();
+    private final ArrayList<Put> putUserList = new ArrayList<>();
     private final ArrayList<Put> putCheckInList = new ArrayList<>();
 
     @Override
@@ -246,18 +247,28 @@ public class ImportThread implements Runnable {
             e1.printStackTrace();
         }
     }
-    private static Table getTable(String tN) {
-        TableName tableName = TableName.valueOf(tN);
+    private static Connection getConnection() {
         Connection connection = connectionLocal.get();
         if (connection == null) {
             try {
                 connection = ConnectionFactory.createConnection(cfg);
                 connectionLocal.set(connection);
-                return connection.getTable(tableName);
+                return connection;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        return connection;
+    }
+    private static Table getTable(String tN) {
+        Connection connection = getConnection();
+        TableName tableName = TableName.valueOf(tN);
+        try {
+            return connection.getTable(tableName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
+
 }

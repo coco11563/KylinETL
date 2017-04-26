@@ -243,6 +243,12 @@ public class ImportThread implements Runnable {
 //            _userTable.close();
             long end_oneday_time = new Date().getTime();
             logger.info("该城市使用了" + (end_oneday_time - start_oneday_time) / 1000 + "秒");
+            _cityTable.close();
+            _userTable.close();
+            _timeTable.close();
+            _checkinTable.close();
+            _countryTable.close();
+            _provinceTable.close();
         } catch (ParseException | KeySizeException | IOException e1) {
             e1.printStackTrace();
         }

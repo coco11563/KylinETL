@@ -8,6 +8,7 @@ import StarModelBuilder.Time.Time;
 import StarModelBuilder.User.User;
 import datastruct.KeySizeException;
 import jcifs.smb.SmbFile;
+import jcifs.util.transport.TransportException;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
@@ -56,6 +57,7 @@ public class ImportThread implements Runnable {
     private int iter;
     ImportThread(String filestatu) {
         this.filestatu = filestatu;
+        System.out.println(filestatu);
         _cityTable = getTable(cityTable);
         _provinceTable = getTable(provinceTable);
         _countryTable = getTable(countryTable);
@@ -83,7 +85,14 @@ public class ImportThread implements Runnable {
 //            // TODO Auto-generated catch block
 //            e.printStackTrace();
 //        }
-        Import(filestatu);
+        int try_time = 0;
+        while (!Import(filestatu)) {
+            try_time++;
+            System.out.println("重新连接");
+            if (try_time > 100) {
+                System.out.println("重连失败" + filestatu);
+            }
+        }
     }
     @SuppressWarnings("unused")
     private static void dateInsert(String iter,String date) throws JSONException, IOException {
@@ -131,7 +140,7 @@ public class ImportThread implements Runnable {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         return df.format((cal.getTime()));
     }
-    private void Import(String filestatu) {
+    private boolean Import(String filestatu) {
         SmbFile remotefs = null;
         try {
             remotefs = new SmbFile(filestatu);
@@ -249,9 +258,12 @@ public class ImportThread implements Runnable {
             _checkinTable.close();
             _countryTable.close();
             _provinceTable.close();
-        } catch (ParseException | KeySizeException | IOException e1) {
+        } catch (TransportException e) {
+            return false;
+        }catch (ParseException | KeySizeException | IOException e1) {
             e1.printStackTrace();
         }
+        return true;
     }
     private static Connection getConnection() {
         Connection connection = connectionLocal.get();

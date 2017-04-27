@@ -1,14 +1,18 @@
 package HbaseImporter;
 
 
+import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
 import jcifs.smb.SmbFileInputStream;
+import jcifs.util.transport.TransportException;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.UnknownHostException;
 
 public class Read {
 	private static Logger logger = Logger.getLogger(HbaseImporter.class);
@@ -230,8 +234,7 @@ public class Read {
 	 * @throws IOException
 	 * @throws JSONException
 	 */
-	public static JSONArray read_jsonFile (SmbFile file, String encode ) throws IOException,JSONException
-	{
+	public static JSONArray read_jsonFile (SmbFile file, String encode ) throws IOException {
 		JSONArray json_array = new JSONArray ( ) ;
 		SmbFileInputStream reader = null;
 		InputStreamReader isr = null ;
@@ -248,10 +251,7 @@ public class Read {
 				json_array.element ( JSONObject.fromObject ( line ) ) ;
 			}
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		finally
+		} finally
 		{
 			//关闭文件流
 			if (reader != null){

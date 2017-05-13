@@ -3,6 +3,7 @@ package HbaseImporter;
 import StarModelBuilder.CheckIn;
 import StarModelBuilder.Location.City;
 import StarModelBuilder.Location.Country;
+import StarModelBuilder.Location.Location;
 import StarModelBuilder.Location.Province;
 import StarModelBuilder.Time.Time;
 import StarModelBuilder.User.User;
@@ -14,6 +15,7 @@ import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.yarn.webapp.hamlet.HamletSpec;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedWriter;
@@ -46,6 +48,7 @@ public class ImportThread implements Runnable {
     private static String checkinTable = "weibodata.check_in_table";
     private static String timeTable = "weibodata.time_table";
     private static String userTable = "weibodata.user_table";
+    private static String localtiontable = "weibodata.location_table";
     private static Logger logger = Logger.getLogger(ImportThread.class);
     private Table _cityTable = null;
     private Table _provinceTable  = null;
@@ -53,9 +56,10 @@ public class ImportThread implements Runnable {
     private Table _checkinTable = null;
     private Table _timeTable = null;
     private Table _userTable = null;
+    private Table _locationTable = null;
     private String filestatu;
     private int iter;
-    ImportThread(String filestatu) {
+    public ImportThread(String filestatu) {
         this.filestatu = filestatu;
         System.out.println(filestatu);
         _cityTable = getTable(cityTable);
@@ -64,6 +68,7 @@ public class ImportThread implements Runnable {
         _checkinTable = getTable(checkinTable);
         _timeTable = getTable(timeTable);
         _userTable = getTable(userTable);
+        _locationTable = getTable(localtiontable);
     }
     private final static ThreadLocal<Connection> connectionLocal = new ThreadLocal<>();
     private final ArrayList<Put> putCityList = new ArrayList<>();
@@ -72,6 +77,7 @@ public class ImportThread implements Runnable {
     private final ArrayList<Put> putTimeList = new ArrayList<>();
     private final ArrayList<Put> putUserList = new ArrayList<>();
     private final ArrayList<Put> putCheckInList = new ArrayList<>();
+    private final ArrayList<Put> putLocationList = new ArrayList<>();
 
     @Override
     public void run() {
@@ -86,11 +92,12 @@ public class ImportThread implements Runnable {
 //            e.printStackTrace();
 //        }
         int try_time = 0;
+
         while (!Import(filestatu)) {
             try_time++;
-            System.out.println("重新连接");
+            logger.error("重新连接");
             if (try_time > 100) {
-                System.out.println("重连失败" + filestatu);
+                logger.error("重连失败" + filestatu);
             }
         }
     }
@@ -144,7 +151,6 @@ public class ImportThread implements Runnable {
         SmbFile remotefs = null;
         try {
             remotefs = new SmbFile(filestatu);
-            remotefs.setConnectTimeout(600000);
         } catch (MalformedURLException e) {
             logger.error("smb出现问题");
             e.printStackTrace();
@@ -161,12 +167,14 @@ public class ImportThread implements Runnable {
             Province province;
             User user;
             CheckIn checkIn;
+            Location location;
 //            Put ptime;
 //            Put pcity;
 //            Put pprovince;
 //            Put pcountry;
 //            Put puser;
             Put pcheckin;
+            Put plocation;
             for (int rownum = 0; rownum < inputjson.size(); rownum++)//按行数遍历
             {
                 JSONObject jcell = inputjson.getJSONObject(rownum);
@@ -179,9 +187,11 @@ public class ImportThread implements Runnable {
                 province = new Province(rowKey.province_name, rowKey.province_id);
                 country = new Country(rowKey.country_name, rowKey.country_id);
                 user = new User(rowKey.user_id, otherInform.getGender(), otherInform.getUsername());
+                location = new Location(city, country);
                 checkIn = new CheckIn(rowKey.weibo_id, rowKey.geo_Hash,
-                        otherInform.getContent(), jcell.toString(),
-                        city, province, country, time, user, rowKey.dateFormat.toDate(), otherInform.getPicURL(),rowKey.lat,rowKey.lon);
+                        otherInform.getContent(),
+                        location, time, user, rowKey.dateFormat.toDate(), otherInform.getPicURL(),rowKey.lat,rowKey.lon);
+
                 //插入流写入
 //                ptime = putTime(time);
 //                pcity = putCity(city);
@@ -189,8 +199,10 @@ public class ImportThread implements Runnable {
 //                pcountry = putCountry(country);
 //                puser = putUser(user);
                 pcheckin = putCheckIn(checkIn);
+                plocation = putLocation(location);
 //                putTimeList.add(ptime);
                 putCheckInList.add(pcheckin);
+                putLocationList.add(plocation);
 //                putUserList.add(puser);
 //                putCountryList.add(pcountry);
 //                putProvinceList.add(pprovince);
@@ -198,6 +210,7 @@ public class ImportThread implements Runnable {
                 if (putCheckInList.size() > 1000) {
 //                    _cityTable.put(putCityList);
                     _checkinTable.put(putCheckInList);
+                    _locationTable.put(putLocationList);
 //                    _countryTable.put(putCountryList);
 //                    _provinceTable.put(putProvinceList);
 //                    _timeTable.put(putTimeList);
@@ -213,6 +226,7 @@ public class ImportThread implements Runnable {
 
 
                     putCheckInList.clear();
+                    putLocationList.clear();
 //                    putCityList.clear();
 //                    putCountryList.clear();
 //                    putProvinceList.clear();
@@ -223,6 +237,7 @@ public class ImportThread implements Runnable {
             }
 //            _cityTable.put(putCityList);
             _checkinTable.put(putCheckInList);
+            _locationTable.put(putLocationList);
 //            _countryTable.put(putCountryList);
 //            _provinceTable.put(putProvinceList);
 //            _timeTable.put(putTimeList);
@@ -238,6 +253,7 @@ public class ImportThread implements Runnable {
 
 
             putCheckInList.clear();
+            putLocationList.clear();
 //            putCityList.clear();
 //            putCountryList.clear();
 //            putProvinceList.clear();
@@ -258,7 +274,9 @@ public class ImportThread implements Runnable {
             _checkinTable.close();
             _countryTable.close();
             _provinceTable.close();
+            _locationTable.close();
         } catch (TransportException e) {
+            logger.error("出现超市问题");
             return false;
         }catch (ParseException | KeySizeException | IOException e1) {
             e1.printStackTrace();

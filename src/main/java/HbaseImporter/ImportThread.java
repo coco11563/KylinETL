@@ -43,7 +43,7 @@ public class ImportThread implements Runnable {
     private static String provinceTable = "weibodata.province_table";
     private static String countryTable = "weibodata.country_table";
     private static String checkinTable = "weibodata.check_in_table";
-    private static String timeTable = "weibodata.time_table";
+    public static String timeTable = "weibodata.time_table";
     private static String userTable = "weibodata.user_table";
     private static String localtiontable = "weibodata.location_table";
     private static Logger logger = Logger.getLogger(ImportThread.class);
@@ -272,7 +272,7 @@ public class ImportThread implements Runnable {
         }
         return connection;
     }
-    private static Table getTable(String tN) {
+    public static Table getTable(String tN) {
         Connection connection = getConnection();
         TableName tableName = TableName.valueOf(tN);
         try {

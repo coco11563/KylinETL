@@ -133,14 +133,11 @@ public class HbaseOperation {
     }
 
 
-    public static void scan(String tablename) throws Exception {
+    public static ResultScanner scan(String tablename) throws Exception {
         @SuppressWarnings({ "deprecation", "resource" })
         HTable table = new HTable(cfg, tablename);
         Scan s = new Scan();
-        ResultScanner rs = table.getScanner(s);
-        for (Result r : rs) {
-            logger.info("Scan: " + r);
-        }
+        return table.getScanner(s);
     }
 
     public static boolean delete(String tablename) throws IOException {

@@ -31,7 +31,14 @@ public class Time {
 
     }
 
-
+    public Time(String date, String year, String month, String day, String is_holiday,String time_id) {
+        setDate(date);
+        setDay(day);
+        setIs_holiday(is_holiday);
+        setMonth(month);
+        setYear(year);
+        setTime_id(time_id);
+    }
     private void generateId(Date date) {
         // TODO Auto-generated catch block
         String id = String.valueOf(date.getTime());

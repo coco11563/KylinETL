@@ -28,7 +28,7 @@ public class HiveTestOne {
             logger.debug("1");
         }
 
-        String sql = "select * from test";
+        String sql = "select * from weibodata.check_in_table where time_id = '1456243200000' limit 10";
 
         ResultSet res = null;
         try {
@@ -49,14 +49,14 @@ public class HiveTestOne {
             e.printStackTrace();
         }
 
-        try {
-            stmt.execute("insert into test1(id, name) values(222,'yang')");//需要拥有hdfs文件读写权限的用户才可以进行此操作
-            logger.debug("create is susscess");
-
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-        }
+//        try {
+//            stmt.execute("insert into test1(id, name) values(222,'yang')");//需要拥有hdfs文件读写权限的用户才可以进行此操作
+//            logger.debug("create is susscess");
+//
+//        } catch (SQLException e) {
+//
+//            e.printStackTrace();
+//        }
         HiveService.closeStmt(stmt);
         HiveService.closeConn(conn);
     }

@@ -32,6 +32,7 @@ public class rowKey {
             e.printStackTrace();
         }
     }
+    private String poiid;
     public String city_name;
     public String province_name;
     public String country_name;
@@ -49,6 +50,11 @@ public class rowKey {
     public double lat;
     public double lon;
     public rowKey(JSONObject weiboInform, Inial inial) throws JSONException, ParseException, KeySizeException {
+        JSONObject place = getPlace(weiboInform);
+        if (place != null)
+        {setPoiid(place.optString("poiid"));} else {
+            setPoiid(null);
+        }
          lat = weiboInform.getJSONObject("geo").getJSONArray("coordinates").getDouble(0);
          lon = weiboInform.getJSONObject("geo").getJSONArray("coordinates").getDouble(1);
         JSONArray url_object = weiboInform.optJSONArray("url_objects");
@@ -166,8 +172,26 @@ public class rowKey {
         }
         return ret;
     }
-
+    public JSONObject getPlace(JSONObject weiboInform) {
+        JSONArray annotations = weiboInform.optJSONArray("annotations");
+        if (annotations != null) {
+            JSONObject _place = annotations.optJSONObject(0);
+            if (_place != null) {
+                return _place.optJSONObject("place");
+            } else {
+                return annotations.optJSONObject(1).optJSONObject("place");
+            }
+        } else return null;
+    }
     public static void main(String args[]) throws KeySizeException {
         System.out.print(getCity(39.958972, 116.301934)[1]);
+    }
+
+    public String getPoiid() {
+        return poiid;
+    }
+
+    public void setPoiid(String poiid) {
+        this.poiid = poiid;
     }
 }

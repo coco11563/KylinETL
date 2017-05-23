@@ -1,10 +1,7 @@
 package StarModelBuilder;
 
 import HbaseImporter.DatePart.dateUtil;
-import StarModelBuilder.Location.City;
-import StarModelBuilder.Location.Country;
 import StarModelBuilder.Location.Location;
-import StarModelBuilder.Location.Province;
 import StarModelBuilder.Time.Time;
 import StarModelBuilder.User.User;
 
@@ -19,6 +16,7 @@ public class CheckIn {
     private String weibo_id;
     private String geoHash;
     private String content;
+    private String poiid;
 //    private String json_file;
     private String uid;
 //    private String cid;
@@ -28,7 +26,7 @@ public class CheckIn {
     private String loid;
     private String unix_time;
     private String pic_Url;
-    public CheckIn(String weibo_id, String geoHash, String content, Location location, Time time, User user, Date date, String pic_Url, double lat, double lon) {
+    public CheckIn(String weibo_id, String geoHash, String content, Location location, Time time, User user, Date date, String pic_Url, double lat, double lon, String poiid) {
         setWeibo_id(weibo_id);
         setGeoHash(geoHash);
         setContent(content);
@@ -46,6 +44,11 @@ public class CheckIn {
             setPic_Url("0");
         } else {
             setPic_Url(pic_Url);
+        }
+        if (poiid == null) {
+            setPoiid("NE");
+        } else {
+            setPoiid(poiid);
         }
     }
     public String getWeibo_id() {
@@ -156,5 +159,13 @@ public class CheckIn {
 
     public void setLoid(String loid) {
         this.loid = loid;
+    }
+
+    public String getPoiid() {
+        return poiid;
+    }
+
+    public void setPoiid(String poiid) {
+        this.poiid = poiid;
     }
 }

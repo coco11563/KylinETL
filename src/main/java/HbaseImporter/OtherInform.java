@@ -11,6 +11,7 @@ public class OtherInform {
     private String picURL;
     private String otherInform;
     private String username;
+
     public OtherInform(String json) {
         setOtherInform(json);
         JSONObject jsonObject = JSONObject.fromObject(json);

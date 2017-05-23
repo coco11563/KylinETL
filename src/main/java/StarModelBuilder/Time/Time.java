@@ -23,10 +23,10 @@ public class Time {
         String dateStr = dateUtil.format(date);
         String[] dateSegment = dateStr.split(" ")[0].split("-");
         setYear(dateSegment[0]);
-        setMonth(dateSegment[1]);
-        setDay(dateSegment[2]);
+        setMonth(dateSegment[0] + dateSegment[1]);
+        setDay(dateSegment[0] + dateSegment[1] + dateSegment[2]);
         setDate(dateUtil.formatFromNormal(date));
-        setTime_id(String.valueOf(dateUtil.parseFromNormal(this.date).getTime()));
+        setTime_id(dateUtil.formatFromNormal(date));
         setIs_holiday(String.valueOf(ChineseHoliday.getHoliday(date)));
 
     }

@@ -223,11 +223,11 @@ public class HbaseOperation {
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("lo_id"), Bytes.toBytes(checkIn.getLoid()));
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("geohash"), Bytes.toBytes(checkIn.getGeoHash()));
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("content"), Bytes.toBytes(checkIn.getContent()));
-//        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("json_file"), Bytes.toBytes(checkIn.getJson_file()));
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("unix_time"), Bytes.toBytes(checkIn.getUnix_time()));
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("pic_url"), Bytes.toBytes(checkIn.getPic_Url()));
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("lat"), Bytes.toBytes(checkIn.getLat()));
         p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("lon"), Bytes.toBytes(checkIn.getLon()));
+        p1.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes("poiid"), Bytes.toBytes(checkIn.getPoiid()));
         return p1;
     }
     public static Put putLocation(Location location) {

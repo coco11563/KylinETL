@@ -9,13 +9,13 @@ public class Location {
         setPid(pid);
         setCoid(coid);
         setCid(cid);
-        setLoid(coid + pid + cid);
+        setLoid(coid + cid);
     }
     public Location(String coid, String cid) {
         String pid = cid.substring(0, 2);
         setPid(pid);
         setCoid(coid);
-        setCid(cid.substring(2,4));
+        setCid(cid);
         setLoid(coid + cid);
     }
     public Location(City city, Country country) {
@@ -23,7 +23,7 @@ public class Location {
         String pid = _cid.substring(0, 2);
         setPid(pid);
         setCoid(country.getId());
-        setCid(_cid.substring(2,4));
+        setCid(city.getId());
         setLoid(country.getId()+city.getId());
     }
     public String getCid() {

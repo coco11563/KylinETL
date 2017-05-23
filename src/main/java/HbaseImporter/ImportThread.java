@@ -15,7 +15,6 @@ import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
-import org.apache.hadoop.yarn.webapp.hamlet.HamletSpec;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedWriter;
@@ -28,14 +27,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 
 import static HbaseImporter.HbaseImporter.cfg;
 import static HbaseImporter.HbaseImporter.completeddate;
 import static HbaseImporter.HbaseImporter.completednum;
 import static HbaseUtil.HbaseOperation.*;
 import static HbaseUtil.HbaseOperation.putCheckIn;
-import static HbaseUtil.HbaseOperation.putUser;
 
 /**
  * Created by Administrator on 2017/4/19.
@@ -168,7 +165,7 @@ public class ImportThread implements Runnable {
             User user;
             CheckIn checkIn;
             Location location;
-//            Put ptime;
+            Put ptime;
 //            Put pcity;
 //            Put pprovince;
 //            Put pcountry;
@@ -190,17 +187,17 @@ public class ImportThread implements Runnable {
                 location = new Location(city, country);
                 checkIn = new CheckIn(rowKey.weibo_id, rowKey.geo_Hash,
                         otherInform.getContent(),
-                        location, time, user, rowKey.dateFormat.toDate(), otherInform.getPicURL(),rowKey.lat,rowKey.lon);
+                        location, time, user, rowKey.dateFormat.toDate(), otherInform.getPicURL(),rowKey.lat,rowKey.lon, rowKey.getPoiid());
 
                 //插入流写入
-//                ptime = putTime(time);
+                ptime = putTime(time);
 //                pcity = putCity(city);
 //                pprovince = putProvince(province);
 //                pcountry = putCountry(country);
 //                puser = putUser(user);
                 pcheckin = putCheckIn(checkIn);
                 plocation = putLocation(location);
-//                putTimeList.add(ptime);
+                putTimeList.add(ptime);
                 putCheckInList.add(pcheckin);
                 putLocationList.add(plocation);
 //                putUserList.add(puser);
@@ -213,16 +210,8 @@ public class ImportThread implements Runnable {
                     _locationTable.put(putLocationList);
 //                    _countryTable.put(putCountryList);
 //                    _provinceTable.put(putProvinceList);
-//                    _timeTable.put(putTimeList);
+                    _timeTable.put(putTimeList);
 //                    _userTable.put(putUserList);
-//                    _cityTable.flushCommits();
-
-
-//                    _checkinTable.flushCommits();
-//                    _countryTable.flushCommits();
-//                    _provinceTable.flushCommits();
-//                    _timeTable.flushCommits();
-//                    _userTable.flushCommits();
 
 
                     putCheckInList.clear();
@@ -230,7 +219,7 @@ public class ImportThread implements Runnable {
 //                    putCityList.clear();
 //                    putCountryList.clear();
 //                    putProvinceList.clear();
-//                    putTimeList.clear();
+                    putTimeList.clear();
 //                    putUserList.clear();
                     logger.debug("进行一次写入");
                 }
@@ -240,16 +229,9 @@ public class ImportThread implements Runnable {
             _locationTable.put(putLocationList);
 //            _countryTable.put(putCountryList);
 //            _provinceTable.put(putProvinceList);
-//            _timeTable.put(putTimeList);
+            _timeTable.put(putTimeList);
 //            _userTable.put(putUserList);
-//            _cityTable.flushCommits();
 
-
-//            _checkinTable.flushCommits();
-//            _countryTable.flushCommits();
-//            _provinceTable.flushCommits();
-//            _timeTable.flushCommits();
-//            _userTable.flushCommits();
 
 
             putCheckInList.clear();
@@ -257,15 +239,9 @@ public class ImportThread implements Runnable {
 //            putCityList.clear();
 //            putCountryList.clear();
 //            putProvinceList.clear();
-//            putTimeList.clear();
+            putTimeList.clear();
 //            putUserList.clear();
             logger.debug("结尾处进行一次写入");
-//            _cityTable.close();
-//            _provinceTable.close();
-//            _checkinTable.close();
-//            _countryTable.close();
-//            _timeTable.close();
-//            _userTable.close();
             long end_oneday_time = new Date().getTime();
             logger.info("该城市使用了" + (end_oneday_time - start_oneday_time) / 1000 + "秒");
             _cityTable.close();

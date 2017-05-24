@@ -8,10 +8,7 @@ import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
@@ -60,30 +57,22 @@ public class TimeTableBuilder {
         System.out.print(rowModifier("20120202".getBytes()));
     }
 
-    public static List<String[]> fileRead(String FileName, String splitOne, String splitTwo) throws FileNotFoundException {
+    public static List<String[]> fileRead(String FileName, String split) throws FileNotFoundException {
         File f = new File(inputpath + "/" + FileName);
         if(!f.exists()) {
             throw new FileNotFoundException();
         } else {
             LinkedList<String[]> temp = new LinkedList<>();
-            FileInputStream in = null;
+            Reader in = null;
+            BufferedReader br = null;
             Charset cs = Charset.forName("UTF-8");
 
             try {
-                in = new FileInputStream(f);
-                ByteBuffer e = ByteBuffer.allocate(1024);
-                FileChannel fcIn = in.getChannel();
-                in = new FileInputStream(f);
-
-                while(true) {
-                    e.clear();
-                    int r = fcIn.read(e);
-                    if(r == -1) {
-                        break;
-                    }
-
-                    e.flip();
-                    String[] bufferResult = cs.decode(e).toString().split(splitOne);
+                String tempString = null;
+                in = new FileReader(f);
+                br = new BufferedReader(in);
+                while((tempString = br.readLine()) != null) {
+                    String[] bufferResult = tempString.split(split);
                     temp.add(bufferResult);
                 }
             } catch (Exception var18) {

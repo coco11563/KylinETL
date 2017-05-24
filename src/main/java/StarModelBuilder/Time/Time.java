@@ -31,7 +31,7 @@ public class Time {
 
     }
 
-    public Time(String date, String year, String month, String day, String is_holiday,String time_id) {
+    public Time(String time_id, String year, String month, String day, String is_holiday,String date) {
         setDate(date);
         setDay(day);
         setIs_holiday(is_holiday);

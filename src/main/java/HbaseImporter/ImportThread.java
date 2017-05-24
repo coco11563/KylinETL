@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static HbaseImporter.HbaseImporter.cfg;
 import static HbaseImporter.HbaseImporter.completeddate;

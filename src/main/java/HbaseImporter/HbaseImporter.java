@@ -52,7 +52,8 @@ public class HbaseImporter {
 
     private static String TableName = "SinaWeiboDataStorage";
     //log4j initial
-
+    //counter
+    public static AtomicInteger atomicInteger = new AtomicInteger(0);
 
 
     private static Logger logger = Logger.getLogger(HbaseImporter.class);

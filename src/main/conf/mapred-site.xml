@@ -245,4 +245,9 @@
       <value>/user</value>
     </property>
     
+    <property>
+      <name>yarn.app.mapreduce.client.job.max-retries</name>
+      <value>30</value>
+    </property>
+    
   </configuration>

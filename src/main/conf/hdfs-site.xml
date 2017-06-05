@@ -58,7 +58,7 @@
     
     <property>
       <name>dfs.datanode.data.dir.perm</name>
-      <value>750</value>
+      <value>755</value>
     </property>
     
     <property>
@@ -159,7 +159,7 @@
     
     <property>
       <name>dfs.namenode.checkpoint.dir</name>
-      <value>/hadoop/hadoop/hdfs/namesecondary</value>
+      <value>/hadoop/hdfs/namesecondary</value>
     </property>
     
     <property>

@@ -58,7 +58,7 @@
     
     <property>
       <name>hadoop.proxyuser.root.hosts</name>
-      <value>ambari.hadoop</value>
+      <value>ambari-server ambari-server.hadoop</value>
     </property>
     
     <property>

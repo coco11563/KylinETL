@@ -170,7 +170,7 @@ public class ImportThread implements Runnable {
 //            Put pcity;
 //            Put pprovince;
 //            Put pcountry;
-//            Put puser;
+            Put puser;
             Put pcheckin;
             Put plocation;
             for (int rownum = 0; rownum < inputjson.size(); rownum++)//按行数遍历
@@ -195,13 +195,13 @@ public class ImportThread implements Runnable {
 //                pcity = putCity(city);
 //                pprovince = putProvince(province);
 //                pcountry = putCountry(country);
-//                puser = putUser(user);
+                puser = putUser(user);
                 pcheckin = putCheckIn(checkIn);
                 plocation = putLocation(location);
                 putTimeList.add(ptime);
                 putCheckInList.add(pcheckin);
                 putLocationList.add(plocation);
-//                putUserList.add(puser);
+                putUserList.add(puser);
 //                putCountryList.add(pcountry);
 //                putProvinceList.add(pprovince);
 //                putCityList.add(pcity);
@@ -212,7 +212,7 @@ public class ImportThread implements Runnable {
 //                    _countryTable.put(putCountryList);
 //                    _provinceTable.put(putProvinceList);
                     _timeTable.put(putTimeList);
-//                    _userTable.put(putUserList);
+                    _userTable.put(putUserList);
 
 
                     putCheckInList.clear();
@@ -221,7 +221,7 @@ public class ImportThread implements Runnable {
 //                    putCountryList.clear();
 //                    putProvinceList.clear();
                     putTimeList.clear();
-//                    putUserList.clear();
+                    putUserList.clear();
                     logger.debug("进行一次写入");
                 }
             }
@@ -231,7 +231,7 @@ public class ImportThread implements Runnable {
 //            _countryTable.put(putCountryList);
 //            _provinceTable.put(putProvinceList);
             _timeTable.put(putTimeList);
-//            _userTable.put(putUserList);
+            _userTable.put(putUserList);
 
 
 
@@ -241,7 +241,7 @@ public class ImportThread implements Runnable {
 //            putCountryList.clear();
 //            putProvinceList.clear();
             putTimeList.clear();
-//            putUserList.clear();
+            putUserList.clear();
             logger.debug("结尾处进行一次写入");
             long end_oneday_time = new Date().getTime();
             logger.info("该城市使用了" + (end_oneday_time - start_oneday_time) / 1000 + "秒");

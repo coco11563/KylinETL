@@ -2,7 +2,7 @@
 # Set environment variables here.
 
 # The java implementation to use. Java 1.6 required.
-export JAVA_HOME=/usr/jdk64/jdk1.8.0_77
+export JAVA_HOME=/usr/jdk64/jdk1.8.0_112
 
 # HBase Configuration directory
 export HBASE_CONF_DIR=${HBASE_CONF_DIR:-/usr/hdp/current/hbase-client/conf}
@@ -62,7 +62,7 @@ export HBASE_MANAGES_ZK=false
 
 export HBASE_OPTS="$HBASE_OPTS -XX:+UseConcMarkSweepGC -XX:ErrorFile=/var/log/hbase/hs_err_pid%p.log -Djava.io.tmpdir=/tmp"
 export HBASE_MASTER_OPTS="$HBASE_MASTER_OPTS -Xmx1024m $JDK_DEPENDED_OPTS"
-export HBASE_REGIONSERVER_OPTS="$HBASE_REGIONSERVER_OPTS -Xmn408m -XX:CMSInitiatingOccupancyFraction=70  -Xms2048m -Xmx2048m $JDK_DEPENDED_OPTS"
+export HBASE_REGIONSERVER_OPTS="$HBASE_REGIONSERVER_OPTS -Xmn816m -XX:CMSInitiatingOccupancyFraction=70  -Xms4096m -Xmx4096m $JDK_DEPENDED_OPTS"
 
 
 # HBase off-heap MaxDirectMemorySize

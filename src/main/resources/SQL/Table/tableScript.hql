@@ -12,6 +12,16 @@ CREATE TABLE country_table(country_id String, country_name String) COMMENT 'COUN
 
 CREATE TABLE location_table(lo_id String, co_id String, p_id String, c_id String) COMMENT 'COUNTRY DATA' ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler' WITH SERDEPROPERTIES ("hbase.columns.mapping" = "lo_id:co_id, lo_id:p_id, lo_id:c_id");
 
+CREATE TABLE check_in_table_1k(weibo_id String, content String, geohash String,user_id String, time_id string, lo_id String , unix_time timestamp, pic_url string,lat double, lon double, poiid string) COMMENT 'CHECK IN DATA STORE' ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler' WITH SERDEPROPERTIES ("hbase.columns.mapping" = "weibo_id:content,weibo_id:geohash, weibo_id:user_id, weibo_id:time_id ,weibo_id:lo_id, weibo_id:unix_time,weibo_id:pic_url, weibo_id:lat#b,weibo_id:lon#b, weibo_id:poiid");
+
+CREATE TABLE check_in_table_10k(weibo_id String, content String, geohash String,user_id String, time_id string, lo_id String , unix_time timestamp, pic_url string,lat double, lon double, poiid string) COMMENT 'CHECK IN DATA STORE' ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler' WITH SERDEPROPERTIES ("hbase.columns.mapping" = "weibo_id:content,weibo_id:geohash, weibo_id:user_id, weibo_id:time_id ,weibo_id:lo_id, weibo_id:unix_time,weibo_id:pic_url, weibo_id:lat#b,weibo_id:lon#b, weibo_id:poiid");
+
+CREATE TABLE check_in_table_100k(weibo_id String, content String, geohash String,user_id String, time_id string, lo_id String , unix_time timestamp, pic_url string,lat double, lon double, poiid string) COMMENT 'CHECK IN DATA STORE' ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler' WITH SERDEPROPERTIES ("hbase.columns.mapping" = "weibo_id:content,weibo_id:geohash, weibo_id:user_id, weibo_id:time_id ,weibo_id:lo_id, weibo_id:unix_time,weibo_id:pic_url, weibo_id:lat#b,weibo_id:lon#b, weibo_id:poiid");
+
+CREATE TABLE check_in_table_1000k(weibo_id String, content String, geohash String,user_id String, time_id string, lo_id String , unix_time timestamp, pic_url string,lat double, lon double, poiid string) COMMENT 'CHECK IN DATA STORE' ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler' WITH SERDEPROPERTIES ("hbase.columns.mapping" = "weibo_id:content,weibo_id:geohash, weibo_id:user_id, weibo_id:time_id ,weibo_id:lo_id, weibo_id:unix_time,weibo_id:pic_url, weibo_id:lat#b,weibo_id:lon#b, weibo_id:poiid");
+
+CREATE TABLE check_in_table_10000k(weibo_id String, content String, geohash String,user_id String, time_id string, lo_id String , unix_time timestamp, pic_url string,lat double, lon double, poiid string) COMMENT 'CHECK IN DATA STORE' ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler' WITH SERDEPROPERTIES ("hbase.columns.mapping" = "weibo_id:content,weibo_id:geohash, weibo_id:user_id, weibo_id:time_id ,weibo_id:lo_id, weibo_id:unix_time,weibo_id:pic_url, weibo_id:lat#b,weibo_id:lon#b, weibo_id:poiid");
+
 insert overwrite table check_in_table_1K select * from check_in_table limit 1000;
 
 //34.129 sec
@@ -26,9 +36,9 @@ insert overwrite table check_in_table_100K select * from check_in_table limit 10
 
 insert overwrite table check_in_table_1000K select * from check_in_table limit 1000000;
 
-//453.837 sec
+//299.978 sec
 
 insert overwrite table check_in_table_10000K select * from check_in_table limit 10000000;
 
-//5921.155 sec
+//2335.417 sec
 

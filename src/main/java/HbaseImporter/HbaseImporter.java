@@ -61,7 +61,7 @@ public class HbaseImporter {
 
     @SuppressWarnings("deprecation")
     public static void main(String[] agrs) throws JSONException, ParseException, IOException {
-        ExecutorService es = Executors.newFixedThreadPool(9);
+        ExecutorService es = Executors.newCachedThreadPool();
         // 获取城市的ID JSON文件
         JSONObject cityNumObject = JSONObject.fromObject(Read.readJson(cityNumPath));
         JSONObject timesetting = JSONObject.fromObject(Read.readJson(timesetpath));

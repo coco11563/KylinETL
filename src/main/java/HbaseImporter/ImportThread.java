@@ -91,13 +91,7 @@ public class ImportThread implements Runnable {
 //        }
         int try_time = 0;
 
-        while (!Import(filestatu)) {
-            try_time++;
-            logger.error("重新连接");
-            if (try_time > 100) {
-                logger.error("重连失败" + filestatu);
-            }
-        }
+        Import(filestatu);
     }
     @SuppressWarnings("unused")
     private static void dateInsert(String iter,String date) throws JSONException, IOException {
@@ -245,19 +239,13 @@ public class ImportThread implements Runnable {
             logger.debug("结尾处进行一次写入");
             long end_oneday_time = new Date().getTime();
             logger.info("该城市使用了" + (end_oneday_time - start_oneday_time) / 1000 + "秒");
-            _cityTable.close();
-            _userTable.close();
-            _timeTable.close();
-            _checkinTable.close();
-            _countryTable.close();
-            _provinceTable.close();
-            _locationTable.close();
         } catch (TransportException e) {
-            logger.error("出现超市问题");
+            logger.error("出现超时问题");
             return false;
         }catch (ParseException | KeySizeException | IOException e1) {
             e1.printStackTrace();
         }
+
         return true;
     }
     private static Connection getConnection() {
